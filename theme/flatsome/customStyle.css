@@ -1,0 +1,23 @@
+/*=====================================================
+SIDEBAR SHOP
+=====================================================*/
+
+#shop-sidebar .product-categories li.cat-parent {
+    background-color: #d5241c;
+    margin-bottom: 30px;
+}
+#shop-sidebar .product-categories li.cat-parent a{
+    padding-left: 5%;
+    color: white;
+}
+
+#shop-sidebar  .product-categories li.cat-parent .toggle {
+    color: white;
+    padding-right: 20px;
+}
+#shop-sidebar ul.children {
+    background-color:white ;
+}
+#shop-sidebar ul.children li a {
+    color:#000000!important;
+}
