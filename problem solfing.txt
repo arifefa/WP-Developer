@@ -1,0 +1,32 @@
+plugin
+    chaty
+
+
+
+    woocommerce
+
+        ❎  how to change
+        ✅  how to set auto cencel order after 1 hour dosent to complete payment ?
+
+
+    
+
+theme
+    ciestra
+
+    flatsome
+
+    exponent
+
+    divi
+
+    shopkeeper
+
+    kalium
+
+Global problem :   
+    
+    ✅ how to change breadcrumb 'HOME' to be 'ALL PRODUCT' ?
+    ✅ how to know the current template in wordpress ?
+    ✅ how to set multi curency ? 
+    ✅ how to set multi pin in map ?
