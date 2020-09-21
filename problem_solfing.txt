@@ -25,7 +25,7 @@ theme
     kalium
 
 Global problem :   
-    
+    ✅ how to redirec www to non www ?
     ✅ how to change breadcrumb 'HOME' to be 'ALL PRODUCT' ?
     ✅ how to know the current template in wordpress ?
     ✅ how to set multi curency ? 
