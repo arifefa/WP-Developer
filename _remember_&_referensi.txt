@@ -1,0 +1,28 @@
+
+REMEMBER
+    theme
+        ➔ ciestra
+        ➔ flatsome
+        ➔ exponent
+        ➔ divi
+        ➔ shopkeeper
+        ➔ kalium
+
+REFERENSI
+    font
+        ➔ https://www.fontsquirrel.com
+
+    img
+        ➔ https://unsplash.com
+        ➔ 
+
+    icon 
+        ➔ https://www.freepik.com
+        ➔ https://iconmonstr.com
+
+
+PLUGIN
+    Redirect
+	➔ 301 redirect
+    Contact
+	➔ contact form 7
