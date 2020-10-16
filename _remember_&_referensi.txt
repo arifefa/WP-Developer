@@ -23,6 +23,13 @@ REFERENSI
 
 PLUGIN
     Redirect
-	➔ 301 redirect
+	➔ : https://wordpress.org/plugins/eps-301-redirects/
+
     Contact
-	➔ contact form 7
+	➔ : https://wordpress.org/plugins/contact-form-7/
+
+    Logo slider using title
+    ➔ : https://wordpress.org/plugins/logo-slider-wp/
+    
+    Disable generate thumnails 
+    ➔ : https://wordpress.org/plugins/disable-generate-thumbnails/
