@@ -14,7 +14,14 @@ REFERENSI
 
     img
         ➔ https://unsplash.com
-        ➔ 
+    
+    vektor
+        ➔ https://undraw.co/illustrations
+        ➔ https://www.drawkit.io
+        ➔ https://www.opendoodles.com
+        ➔ https://humaaans.com/
+        ➔ https://lukaszadam.com/illustrations
+        ➔ https://iradesign.io/illustrations
 
     icon 
         ➔ https://www.freepik.com
@@ -33,3 +40,6 @@ PLUGIN
     
     Disable generate thumnails 
     ➔ : https://wordpress.org/plugins/disable-generate-thumbnails/
+
+    Table 
+    ➔ : https://wordpress.org/plugins/advanced-custom-fields-table-field/
