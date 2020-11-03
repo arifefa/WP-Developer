@@ -36,7 +36,7 @@ CUSTOM FOOTER CURENT YEAR
         $thisYear = (int) date('Y');
         $string = '<div class="CustomFooterCurrentYear"><span>Copyright ©' . $fromYear . (($fromYear != $thisYear) ? '-' . $thisYear : '. ') .
             ' Name Client. All Rights Reserved. Bug reporting & feedback, please contact us:&nbsp;' .
-            '<a href="#" target="_blank"><u>Your Brand</u></a></span></div>';
+            '<a href="https://yourdomain.co.id/bug-reports/?web=domainclient.com" target="_blank"><u>Your Brand</u></a></span></div>';
         return $string;
     }
 
