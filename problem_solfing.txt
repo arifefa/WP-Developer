@@ -1,11 +1,15 @@
-✅❎➔
+✅❎➔   
 
 plugin
     chaty
     woocommerce
+        ✅  flatsome = show multi category in catalog product 
+             ➔   
         ✅  how to change breadcrumb 'HOME' to be 'ALL PRODUCT' ?
         ✅  how to set auto cencel order after 1 hour dosent to complete payment ?
         ✅  how to set multi curency ?
+    contact form 7
+        ✅  2 colom 
 
 Global problem :   
     ✅  how to redirec www to non www ?
