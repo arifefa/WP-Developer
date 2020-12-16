@@ -8,12 +8,20 @@ plugin
         ✅  how to change breadcrumb 'HOME' to be 'ALL PRODUCT' ?
         ✅  how to set auto cencel order after 1 hour dosent to complete payment ?
         ✅  how to set multi curency ?
+    woonotif
+        ✅  notifikasi order woocommerce in whatsapp
+             ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/plugin/woonotif
     contact form 7
         ✅  2 colom 
+    
 
-Global problem :   
+Global problem WP :   
+    ✅  how to force alt?
+         ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/js/custom.js
     ✅  how to redirec www to non www ?
+         ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/default/index.php
     ✅  how to know the current template in wordpress ? 
+         ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/default/header.php
     ✅  how to set multi pin in map ?
     ✅  how to remove outdated content ?
          ➔  https://www.google.com/webmasters/tools/removals?pli=1 
