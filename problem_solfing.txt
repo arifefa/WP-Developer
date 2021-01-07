@@ -16,13 +16,19 @@ plugin
     
 
 Global problem WP :   
-    ✅  how to force alt?
-         ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/js/custom.js
-    ✅  how to redirec www to non www ?
-         ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/default/index.php
-    ✅  how to know the current template in wordpress ? 
-         ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/default/header.php
-    ✅  how to set multi pin in map ?
-    ✅  how to remove outdated content ?
-         ➔  https://www.google.com/webmasters/tools/removals?pli=1 
-    
+        ✅  how to force alt?
+            ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/js/custom.js
+        ✅  how to redirec www to non www ?
+            ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/default/index.php
+        ✅  how to know the current template in wordpress ? 
+            ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/default/header.php
+        ✅  how to set multi pin in map ?
+        ✅  how to remove outdated content ?
+            ➔  https://www.google.com/webmasters/tools/removals?pli=1 
+        ✅  how to fix spam boot ?
+            ➔ add plugin https://wordpress.org/plugins/cf7-conditional-fields/ using conditional 
+            [ if(fill value 'character text' ) => show button submit ]
+            
+
+
+        
