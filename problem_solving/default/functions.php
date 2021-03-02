@@ -72,6 +72,18 @@ CUSTOM FORCE ALT
         return $content;
     }
     add_filter('the_content', 'add_alt_tags', 99999);
+    
+/*===================================================
+CUSTOM - GET CURRENT TEAMPLATE
+===================================================*/
+    function show_template()
+    {
+        if (is_super_admin()) {
+            global $template;
+            print_r($template);
+        }
+    }
+    add_action('wp_footer', 'show_template');
 
 /*===================================================
 WOOCOMERCE - CUSTOM AUTO CENCELING ORDER WHEN AFTER 1 HOUR
@@ -122,5 +134,6 @@ WOOCOMERCE - CHANGE BREADCRUMB HOME TO PRODUCT
         // Change the breadcrumb home text from 'Home' to 'Products'
         $defaults['home'] = 'Products';
         return $defaults;
-    }    
+    }   
+     
 ?>

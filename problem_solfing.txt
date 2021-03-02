@@ -22,6 +22,7 @@ Global problem WP :
             ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/default/index.php
         ✅  how to know the current template in wordpress ? 
             ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/default/header.php
+            ➔ https://github.com/arifefa/WP-Developer/tree/master/problem_solving/default/functions.php
         ✅  how to set multi pin in map ?
         ✅  how to remove outdated content ?
             ➔  https://www.google.com/webmasters/tools/removals?pli=1 
