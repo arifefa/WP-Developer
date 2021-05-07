@@ -135,5 +135,20 @@ WOOCOMERCE - CHANGE BREADCRUMB HOME TO PRODUCT
         $defaults['home'] = 'Products';
         return $defaults;
     }   
+
+/*===================================================
+WOOCOMERCE - BREADCRUMB  
+===================================================*/
+    // breadcrumb yoast
+    add_shortcode('display_custom_breadcrumb', 'custom_breadcrumb');
+    function custom_breadcrumb()
+    {
+        if (function_exists('yoast_breadcrumb')) {
+    yoast_breadcrumb('<p id="breadcrumbs">', '</p>');
+        }
+    }
+
+    // breadcrumb woocomerce
+    add_shortcode('display_custom_breadcrumb', 'woocommerce_breadcrumb');
      
 ?>
