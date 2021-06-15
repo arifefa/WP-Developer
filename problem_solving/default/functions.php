@@ -84,7 +84,25 @@ CUSTOM - GET CURRENT TEAMPLATE
         }
     }
     add_action('wp_footer', 'show_template');
-
+    
+/*===================================================
+CUSTOM - CONFIGURASI API
+===================================================*/    
+    add_shortcode('display_api', 'custom_api');
+    function custom_api()
+        {
+            $domains = json_decode(file_get_contents('https://api.example.com/hehe'));
+            ?>
+            <div class="row">
+                <?php foreach($domains as $domain) { ?>
+                <div class="col iniCustom">
+                    <?php echo $domain->name ?>
+                </div>
+                <?php } ?>
+            </div>
+            <?php
+        }
+    
 /*===================================================
 WOOCOMERCE - CUSTOM AUTO CENCELING ORDER WHEN AFTER 1 HOUR
 ===================================================*/
