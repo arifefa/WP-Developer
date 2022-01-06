@@ -168,5 +168,117 @@ WOOCOMERCE - BREADCRUMB
 
     // breadcrumb woocomerce
     add_shortcode('display_custom_breadcrumb', 'woocommerce_breadcrumb');
-     
+
+/*==========================================================
+// CUSTOM GET TITLE CATEGORY & GET TITLE POST 
+==========================================================*/
+    add_shortcode('displayTitleCategory', 'custom_title_category');
+    function custom_title_category()
+    {
+        return single_cat_title('', false);
+    }
+
+    add_shortcode('displayTitlePost', 'custom_title_post');
+    function custom_title_post()
+    {
+        return get_the_title();
+    }
+
+/*==========================================================
+// GSAP INIT
+==========================================================*/
+    function call_script()
+    {
+        wp_enqueue_script('scrolltrigger', get_stylesheet_directory_uri() . '/assets/js/ScrollTrigger.min.js', array(), false, true);
+
+        wp_enqueue_script('gsap', get_stylesheet_directory_uri() . '/assets/js/gsap.min.js', array(), false, true);
+
+        wp_enqueue_script('animation', get_stylesheet_directory_uri() . '/assets/js/animation_script.js', array(), false, true);
+
+        wp_enqueue_script('custom', get_stylesheet_directory_uri() . '/assets/js/custom_script.js', array(), false, true);
+    }
+    add_action('wp_enqueue_scripts', 'call_script');
+
+/*==========================================================
+// REDIRECT AFTER LOGIN
+==========================================================*/
+    function ts_redirect_login()
+    {
+        return get_permalink(get_option('woocommerce_myaccount_page_id'));
+    }
+
+    add_filter('woocommerce_login_redirect', 'ts_redirect_login');
+
+
+/*==========================================================
+// ADD SCRIPT FOR DEALER RESMI FEATURE
+==========================================================*/
+    require_once('custom-portfolio-filter/scripts.php');
+
+    add_action('wpcf7_init', function (){
+        wpcf7_add_form_tag( 'country' , 'cf7_ip_to_country_form_tag' );
+    }); 
+    function cf7_ip_to_country_form_tag($tag){
+        // https://ipstack.com API
+        $api_key = '09d09b242197f1c936148f030ebc82e8';
+        $ipAddress = $_SERVER['REMOTE_ADDR'];
+        if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
+            $ipAddress = array_pop(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']));
+        }
+        // Get API Response
+        $url = 'http://api.ipstack.com/' . $ipAddress . '?access_key=' . $api_key;    
+        $response = wp_remote_get($url);
+        $body = json_decode(wp_remote_retrieve_body($response));
+
+        return '<input type="text" name="country" value="'.$body->country_name.'" placeholder="'.$body->country_name.'">';
+    }
+
+/*==========================================================
+// GET IP ADDRESS FOR CONTACT FORM 7
+==========================================================*/
+    function get_ipAdress() {
+        foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key) {
+            if (array_key_exists($key, $_SERVER) === true) {
+                foreach (explode(',', $_SERVER[$key]) as $ip) {
+                    if (filter_var($ip, FILTER_VALIDATE_IP) !== false) {
+                        return $ip;
+                    }
+                }
+            }
+        }
+    }
+    
+    add_action('wpcf7_init', function (){
+        wpcf7_add_form_tag( 'country' , 'cf7_ip_to_country_form_tag' );
+    }); 
+    
+    function cf7_ip_to_country_form_tag($tag){
+        // https://ipstack.com or https://ipgeolocation.io/ for get API
+        $api_key = '09d09b242197f1c936148f030ebc82e8';
+        $ipAddress = get_ipAdress();
+        // Get API Response
+        $url = 'http://api.ipstack.com/' . $ipAddress . '?access_key=' . $api_key;    
+        $response = wp_remote_get($url);
+        $body = json_decode(wp_remote_retrieve_body($response));
+    
+        return '<input type="text" name="country" value="'.$body->country_name.'" placeholder="'.$body->country_name.'">';
+    }
+
+/*==========================================================
+// CALL CUSTOM SCRIPT N CSS - AUTO VERSIONING
+==========================================================*/
+    function add_timestamp_to_childtheme_stylesheet() {
+        wp_dequeue_style( 'flatsome-style' );
+        wp_deregister_style( 'flatsome-style' );
+        wp_enqueue_style('flatsome-style', get_stylesheet_uri().'?'.filemtime(get_stylesheet_directory().'/style.css'), array(), null);
+    }
+    add_action( 'wp_print_styles', 'add_timestamp_to_childtheme_stylesheet' );
+
+    function call_script() {
+        wp_enqueue_script( 'custom-script', get_stylesheet_directory_uri() . '/assets/js/custom_script.js', array( 'jquery' ), filemtime(get_stylesheet_directory() . '/assets/js/custom_script.js'), true);
+        wp_enqueue_script('gsap', get_stylesheet_directory_uri() . '/assets/js/gsap.min.js', array(), false, true);
+        wp_enqueue_script('gsap-script', get_stylesheet_directory_uri() . '/assets/js/gsap_script.js', array(), filemtime(get_stylesheet_directory() . '/assets/js/gsap_script.js'), true);
+    }
+    add_action( 'wp_enqueue_scripts', 'call_script' );
+
 ?>
