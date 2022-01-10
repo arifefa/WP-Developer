@@ -281,4 +281,39 @@ WOOCOMERCE - BREADCRUMB
     }
     add_action( 'wp_enqueue_scripts', 'call_script' );
 
+/*==========================================================
+// NOTIF LIMIT EMAIL CF7 GET DATABASE CFDB7
+==========================================================*/
+add_filter( 'wpcf7_validate', 'email_already_in_cfdb7', 10, 2 );
+function email_already_in_cfdb7 ( $result, $tags ) {
+    //changed variable
+    $email_field_name ='your-email';
+    $form_post_id = 219;
+    $notice_message = 'Your email already in use';
+    
+    //get email from input form
+    $form  = WPCF7_Submission::get_instance();
+    $email = $form->get_posted_data($email_field_name);
+    
+    //get email from database
+    global $wpdb;
+    $datas = array();
+    //query
+    $get_db = $wpdb->get_results("SELECT form_value FROM wp_db7_forms WHERE form_post_id = $form_post_id");
+    //selection email from dump
+    $pattern = '/[a-z0-9_\-\+\.]+@[a-z0-9]+\.([a-z]{2,4})(?:\.[a-z]{2})?/i';
+    foreach ($get_db as $index => $data) {
+        preg_match_all($pattern, $data->form_value , $matches);
+        $datas[$index] = $matches[0][0];
+    }
+    //validate email
+    foreach ($datas as $index => $data) {
+        if( $data == $email ){
+            $result->invalidate($email_field_name, $notice_message);
+        }
+    }
+    //return result
+    return $result;
+}    
+
 ?>
