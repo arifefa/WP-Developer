@@ -14,6 +14,7 @@ REFERENSI
 
     img
         ➔ https://unsplash.com
+		➔ https://pixels.com 
     
     vektor
         ➔ https://undraw.co/illustrations
@@ -27,6 +28,14 @@ REFERENSI
         ➔ https://www.freepik.com
         ➔ https://iconmonstr.com
 
+	css animation : 
+		➔ https:https://animista.net (transition)
+		➔ https://sliderrevolution.com/resources/css-animated-background
+		
+		
+		
+	
+	
 
 PLUGIN
     Redirect

@@ -316,4 +316,11 @@ function email_already_in_cfdb7 ( $result, $tags ) {
     return $result;
 }    
 
+/*==========================================================
+SET UPLOAD SIZE MAX 300kb
+==========================================================*/
+add_filter( 'upload_size_limit', 'set_max_upload' );
+function set_max_upload( $bytes ){
+    return 307200; //300kb
+}
 ?>
