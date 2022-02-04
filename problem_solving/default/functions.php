@@ -1,4 +1,14 @@
 <?php
+/*=========================================================
+DISABLE AUTO UPDATE ALL PLUGIN
+=========================================================*/	
+    add_filter( 'auto_update_plugin', '__return_false' );
+
+/*=========================================================
+DISABLE AUTO UPDATE IN ALL THEME 
+=========================================================*/	  
+    add_filter( 'auto_update_theme', '__return_false' );    
+    
 /*===================================================
 CUSTOM LOGO LOGIN URL
 ===================================================*/
@@ -86,23 +96,23 @@ CUSTOM - GET CURRENT TEAMPLATE
     add_action('wp_footer', 'show_template');
     
 /*===================================================
-CUSTOM - CONFIGURASI API
+CUSTOM - CONFIGURATION API
 ===================================================*/    
     add_shortcode('display_api', 'custom_api');
     function custom_api()
-        {
-            $domains = json_decode(file_get_contents('https://api.example.com/hehe'));
-            ?>
-            <div class="row">
-                <?php foreach($domains as $domain) { ?>
-                <div class="col iniCustom">
-                    <?php echo $domain->name ?>
-                </div>
-                <?php } ?>
+    {
+        $domains = json_decode(file_get_contents('https://api.example.com/hehe'));
+        ?>
+        <div class="row">
+            <?php foreach($domains as $domain) { ?>
+            <div class="col iniCustom">
+                <?php echo $domain->name ?>
             </div>
-            <?php
-        }
-    
+            <?php } ?>
+        </div>
+        <?php
+    }
+
 /*===================================================
 WOOCOMERCE - CUSTOM AUTO CENCELING ORDER WHEN AFTER 1 HOUR
 ===================================================*/
@@ -284,43 +294,186 @@ WOOCOMERCE - BREADCRUMB
 /*==========================================================
 // NOTIF LIMIT EMAIL CF7 GET DATABASE CFDB7
 ==========================================================*/
-add_filter( 'wpcf7_validate', 'email_already_in_cfdb7', 10, 2 );
-function email_already_in_cfdb7 ( $result, $tags ) {
-    //changed variable
-    $email_field_name ='your-email';
-    $form_post_id = 219;
-    $notice_message = 'Your email already in use';
-    
-    //get email from input form
-    $form  = WPCF7_Submission::get_instance();
-    $email = $form->get_posted_data($email_field_name);
-    
-    //get email from database
-    global $wpdb;
-    $datas = array();
-    //query
-    $get_db = $wpdb->get_results("SELECT form_value FROM wp_db7_forms WHERE form_post_id = $form_post_id");
-    //selection email from dump
-    $pattern = '/[a-z0-9_\-\+\.]+@[a-z0-9]+\.([a-z]{2,4})(?:\.[a-z]{2})?/i';
-    foreach ($get_db as $index => $data) {
-        preg_match_all($pattern, $data->form_value , $matches);
-        $datas[$index] = $matches[0][0];
-    }
-    //validate email
-    foreach ($datas as $index => $data) {
-        if( $data == $email ){
-            $result->invalidate($email_field_name, $notice_message);
+    add_filter( 'wpcf7_validate', 'email_already_in_cfdb7', 10, 2 );
+    function email_already_in_cfdb7 ( $result, $tags ) {
+        //changed variable
+        $email_field_name ='your-email';
+        $form_post_id = 219;
+        $notice_message = 'Your email already in use';
+        
+        //get email from input form
+        $form  = WPCF7_Submission::get_instance();
+        $email = $form->get_posted_data($email_field_name);
+        
+        //get email from database
+        global $wpdb;
+        $datas = array();
+        //query
+        $get_db = $wpdb->get_results("SELECT form_value FROM wp_db7_forms WHERE form_post_id = $form_post_id");
+        //selection email from dump
+        $pattern = '/[a-z0-9_\-\+\.]+@[a-z0-9]+\.([a-z]{2,4})(?:\.[a-z]{2})?/i';
+        foreach ($get_db as $index => $data) {
+            preg_match_all($pattern, $data->form_value , $matches);
+            $datas[$index] = $matches[0][0];
         }
-    }
-    //return result
-    return $result;
-}    
+        //validate email
+        foreach ($datas as $index => $data) {
+            if( $data == $email ){
+                $result->invalidate($email_field_name, $notice_message);
+            }
+        }
+        //return result
+        return $result;
+    }    
 
 /*==========================================================
 SET UPLOAD SIZE MAX 300kb
 ==========================================================*/
-add_filter( 'upload_size_limit', 'set_max_upload' );
-function set_max_upload( $bytes ){
-    return 307200; //300kb
-}
+    add_filter( 'upload_size_limit', 'set_max_upload' );
+    function set_max_upload( $bytes ){
+        return 307200; //300kb
+    }
+
+/*==========================================================
+CUSTOM MODIF READ MORE
+==========================================================*/
+    function modify_read_more_link() {
+        return '<a class="more-link" href="' . get_permalink() . '">Your Read More Link Text</a>';
+    }
+    add_filter( 'the_content_more_link', 'modify_read_more_link' );
+
+/*=========================================================
+ADD CUSTOM POST TYPE
+=========================================================*/	
+	function custom_post_type_project(){
+		$labels=array(
+			'menu_icon' => 'dashicons-category',
+			'name' => 'Project',
+			'singular_name' => 'Project',
+			'add_new' => 'Add Project',
+			'add_item' => 'Add item',
+			'add_new_item' => 'Add new project',
+			'all_items' => 'All Project',
+			'edit_item' => 'Edit Project',
+			'view_item' => 'View project',
+			'search_item' => 'Search item',
+			'not_found' => 'No items found',
+			'not_found_in_trash' => 'No items found in trash',
+			'parent_item_colon' => 'Add new project item'
+		);
+		$args=array(
+			'labels' => $labels,
+			'public' => true,
+			'has_archive' => true,
+			'pubicly_queryable' => true,
+			'query_var' => true,
+			'rewrite' => true,
+			'pubicly_queryable' => true,
+			'hierarchical' => false,
+			'capabity_type' => 'post',
+			'supports' => array(
+				'title',
+				'thumbnail',
+				'editor',
+				'excerpt',
+				'comment'),
+			// 'taxonomies' => array('category','post_tag'), //-> this is default post
+			'menu_position' => null,
+			'exclude_from_search' =>false
+		);
+		register_post_type('Project',$args);
+	};
+	add_action('init','custom_post_type_project');
+
+/*=========================================================
+ADD CUSTOM TAXONOMY
+=========================================================*/	
+    function custom_taxonomy_project_a() {
+        $labels=array(
+            'name' => 'types',
+            'singular_name' => 'type',
+            'search_items' => 'Search type',
+            'all_items' => 'All item',
+            'parent_item' => 'Parent item',
+            'parent_item_colon' => 'Parent item',
+            'edit_item' => 'Edit item',
+            'update_item' => 'Update item',
+            'add_new_item' => 'Add new type',
+            'new_item_name' => 'Add new item name',
+            'menu_name' => 'Type Project',
+        );
+        $args=array(
+            'labels' => $labels,
+            'hierarchical' => true,
+            'show_ui' => true,
+            'show_admin_column' => true,
+            'query_var' => true,
+            'rewrite' => array( 'slug' => 'type' ),
+        );
+        //name taxonomy, name custom post type, argument
+        register_taxonomy('type',array('project'),$args);
+    }
+    add_action( 'init', 'custom_taxonomy_project_a' );  
+
+    function custom_taxonomy_project_b() {
+        $labels=array(
+            'name' => 'Tags',
+            'singular_name' => 'tag',
+            'search_items' => 'Search tag',
+            'all_items' => 'All item',
+            'parent_item' => 'Parent item',
+            'parent_item_colon' => 'Parent item',
+            'edit_item' => 'Edit item',
+            'update_item' => 'Update item',
+            'add_new_item' => 'Add new tag',
+            'new_item_name' => 'Add new tag name',
+            'menu_name' => 'Tag Project',
+        );
+        $args=array(
+            'labels' => $labels,
+            // 'hierarchical' => true,
+            'show_ui' => true,
+            'show_admin_column' => true,
+            'query_var' => true,
+            'rewrite' => array( 'slug' => 'tag' ),
+        );
+        //type,name custom post type,argument
+        register_taxonomy('tag',array('project'),$args);
+    }
+    add_action( 'init', 'custom_taxonomy_project_b' );
+
+/*=========================================================
+ADD SHORTCODE TO SHOW ALL POST TYPE PROJECT
+=========================================================*/	
+    add_shortcode( 'display_project', 'display_custom_post_type_project' );
+    function display_custom_post_type_project(){
+        $args = array(
+            'post_type' => 'project',
+			'post_status' => 'publish',
+			'posts_per_page' => 6
+        );
+
+        $string = '';
+        $query = new WP_Query( $args );
+        if( $query->have_posts() ){
+
+            $string .= '<div class="exp-post-thumb">';
+            while( $query->have_posts() ){
+                $query->the_post();
+                $string .= '<article>';
+                $string .= '<div class="exp-post-details">';
+                $string .= '<div class="exp-post-title-meta">';
+								 $string .= '<h1 class="exp-post-title">' . get_the_title() . '</h1>';
+								 $string .= '<p>'.get_post().'</p>';
+                $string .= '</div>';
+                $string .= '</div>';
+                $string .= '</article>';
+            }
+            $string .= '</div>';
+        }
+        wp_reset_postdata();
+        return $string;
+    }
+
+
 ?>
