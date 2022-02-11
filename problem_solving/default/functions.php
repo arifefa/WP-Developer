@@ -476,4 +476,167 @@ ADD SHORTCODE TO SHOW ALL POST TYPE PROJECT
     }
 
 
+/*===================================================
+WOOCOMMERCE - new / custom order status
+===================================================*/
+// register (add) a new post status
+add_action( 'init', 'register_custom_post_status', 10 );
+function register_custom_post_status() {
+    register_post_status( 'wc-awaiting-shipment', array(
+        'label'                     => 'Proses Pengiriman',
+        'public'                    => true,
+        'exclude_from_search'       => false,
+        'show_in_admin_all_list'    => true,
+        'show_in_admin_status_list' => true,
+        'label_count'               => _n_noop( 'Proses Pengiriman <span class="count">(%s)</span>', 'Proses Pengiriman <span class="count">(%s)</span>', 'woocommerce' )
+    ) );
+
+}
+
+// style for custom order status label in admin side
+add_action('admin_head', 'shipment_label_css');
+function shipment_label_css() {
+  echo '<style>
+    .status-awaiting-shipment{
+        background: #e6f3b2;
+        color: #899b41;
+    } </style>';
+}
+
+// add in detail order item select box and sorting them
+add_filter( 'wc_order_statuses', 'custom_wc_order_statuses' );
+function custom_wc_order_statuses( $order_statuses ) {
+    $sorted_order_statuses = [];
+    foreach( $order_statuses as $key => $label ) {
+        $sorted_order_statuses[$key] = $order_statuses[$key];
+        if( 'wc-processing' === $key ){
+            $sorted_order_statuses['wc-awaiting-shipment'] = 'Proses Pengiriman';
+        }
+    }
+    return $sorted_order_statuses;
+}
+// add in admin order list bulk dropdown
+add_filter( 'bulk_actions-edit-shop_order', 'custom_dropdown_bulk_actions_shop_order', 20, 1 );
+function custom_dropdown_bulk_actions_shop_order( $actions ) {
+    $new_actions = array();
+    // add new order status before processing
+    foreach ($actions as $key => $action) {
+        if ('mark_on-hold' === $key) {
+            $new_actions['mark_awaiting-shipment'] = 'Ubah status ke proses pengiriman';
+        }
+        $new_actions[$key] = $action;
+    }
+    return $new_actions;
+}
+/*===================================================
+ WOOCOMMERCE - add custom field (resi) in order (admin side)
+===================================================*/
+add_action( 'woocommerce_admin_order_data_after_order_details', 'custom_woocommerce_admin_order_data_after_order_details' );
+function custom_woocommerce_admin_order_data_after_order_details( $order ){
+?>
+    <br class="clear" />
+    <h4>Lain-lain</h4>
+    <?php $custom_field_value = get_post_meta( $order->id, 'wc_no_resi', true ); ?>
+    <div>
+    <?php
+        woocommerce_wp_text_input( array(
+            'id' => 'wc_no_resi',
+            'label' => 'Nomor Resi:',
+            'value' => $custom_field_value,
+            'wrapper_class' => 'form-field-wide'
+        ) );
+    ?>
+    </div>
+<?php
+}
+
+//save meta & send email
+add_action( 'woocommerce_process_shop_order_meta', 'custom_woocommerce_process_shop_order_meta' );
+function custom_woocommerce_process_shop_order_meta( $order_id ){
+    //init var
+    $order = wc_get_order( $order_id );
+    $text_resi_old = get_post_meta( $order->id, 'wc_no_resi', true );
+    //update meta
+    update_post_meta( $order_id, 'wc_no_resi', wc_sanitize_textarea( $_POST[ 'wc_no_resi' ] ) );
+    //send email
+    $text_resi = wc_sanitize_textarea( $_POST[ 'wc_no_resi' ] );
+    if(!empty($text_resi)){
+        if($text_resi!=$text_resi_old){
+            $mailer = WC()->mailer();
+            $text_order_id = '#'.$order_id;
+            $shipping_method = $order->get_shipping_method();
+            $billing_name = $order->get_billing_first_name();
+            // customer email
+            $to = $order->get_billing_email();
+            // email subject
+            $subject = 'Update Resi Pesanan '.$text_order_id;
+            //email message
+            $message_body = 'Hai '.$billing_name.',<br><br>Resi untuk pesanan Anda (<span style="color:#ad000059"><strong>'.$text_order_id.'</strong></span>) telah diperbarui dengan nomor resi <span style="background-color:#ad000059;color:white;font-weight:bold;padding: 1px 4px;letter-spacing: 1px;">'.$text_resi.'</span> dan menggunakan pengiriman '.$shipping_method.'.';
+            // email massage head
+            $message = $mailer->wrap_message( 'Update Resi Pesanan '.$text_order_id, $message_body );
+            // header type
+            $headers = 'Content-Type: text/html\r\n';
+            // sending email
+            $mailer->send( $to, $subject, $message, $headers);
+        }
+    }
+}
+
+/*===================================================
+ WOOCOMMERCE - email notification for custom order status
+===================================================*/
+// enable the action
+add_filter( 'woocommerce_email_actions', 'filter_woocommerce_email_actions' );
+function filter_woocommerce_email_actions( $actions ){
+    $actions[] = 'woocommerce_order_status_wc-awaiting-shipment';
+    return $actions;
+}
+// send email order status changed to awaiting-shipment
+add_action('woocommerce_order_status_changed', 'shipped_status_custom_notification', 10, 4);
+function shipped_status_custom_notification( $order_id, $from_status, $to_status, $order ) {
+    if(  'awaiting-shipment' === $to_status ) {
+        $mailer = WC()->mailer();
+        $text_order_id = '#'.$order->get_id();
+        $shipping_method = $order->get_shipping_method();
+        // customer email
+        $to = $order->get_billing_email();
+        // email subject
+        $subject = 'Proses Pengiriman Pesanan '.$text_order_id;
+        //email message
+        $message_body = 'Hai '.$order->get_billing_first_name().',<br><br>Status pesanan Anda (<span style="color:#ad000059"><strong>'.$text_order_id.'</strong></span>) telah diperbarui dan dalam <span style="color:green;"><strong>proses pengiriman</strong></span> menggunakan '.$shipping_method.'.';
+        // email massage head
+        $message = $mailer->wrap_message( 'Proses Pengiriman Pesanan #'.$order->get_id(), $message_body );
+        // header type
+        $headers = 'Content-Type: text/html\r\n';
+        // sending email
+        $mailer->send( $to, $subject, $message, $headers);
+    }
+}
+ 
+/*===================================================
+ WOOCOMMERCE - set time a week for awating-shipment order status change to completed
+===================================================*/
+add_action('init', 'wp_orders');
+function wp_orders(){
+    global $wpdb;
+    $results = $wpdb->get_results("SELECT * FROM  $wpdb->posts WHERE post_type = 'shop_order' AND post_status = 'wc-awaiting-shipment'");
+    foreach ($results as $result) {
+        $date1 = $result->post_modified_gmt;       
+        $order_id = $result->ID;
+        $date2=date("Y-m-d h:i:s");
+
+        $dteStart = new DateTime($date1);
+        $dteEnd   = new DateTime($date2);
+        $dteDiff  = $dteStart->diff($dteEnd);
+        $Diff = $dteDiff->format("%d");
+        $int = (int)$Diff;
+        if($int>=7){
+            $order = new WC_Order($order_id);
+            if (!empty($order)) {
+                $order->update_status( 'wc-completed' );
+            }
+        }
+    }
+}
+
 ?>
