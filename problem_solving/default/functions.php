@@ -292,6 +292,17 @@ WOOCOMERCE - BREADCRUMB
     add_action( 'wp_enqueue_scripts', 'call_script' );
 
 /*==========================================================
+// CALL CUSTOM SCRIPT - For Dashbord WP
+==========================================================*/
+function custom_admin_js()
+{
+$url = get_bloginfo('template_directory') . '/custom_dashboard.js';
+echo '"
+<script type="text/javascript" src="' . $url . '"></script>"';
+}
+add_action('admin_footer', 'custom_admin_js');
+
+/*==========================================================
 // NOTIF LIMIT EMAIL CF7 GET DATABASE CFDB7
 ==========================================================*/
     add_filter( 'wpcf7_validate', 'email_already_in_cfdb7', 10, 2 );
