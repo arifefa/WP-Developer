@@ -8,10 +8,15 @@
     <!-- iniCustom -->
     <link rel="canonical" href="<?php echo get_site_url() ?>">
     <link rel="canonical" href="<?php echo get_link_url() ?>">
-
-
+    <?php
+    add_action('wp_head', 'show_template');
+    function show_template()
+    {
+        global $template;
+        print_r($template);
+    }
+    ?>
     <!-- iniCustom -->
-
 
 </head>
 
