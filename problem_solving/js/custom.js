@@ -13,6 +13,12 @@ $(".home .exp-post-title").replaceWith(function () {
 	return $("<p />", attrs).append($(this).contents());
 });
 
+jQuery(function () {
+	jQuery('.sectionBlog .post-title').each(function () {
+		jQuery(this).replaceWith('<p class="is-large post-title fw-700">' + jQuery(this).html() + '</p>');
+	});
+});
+
 // CHANGE ATRIBUTE AHREF
 $(document).ready(function () {
 	$("[href='https://google.com']").attr("href", "https://google.com/new");
